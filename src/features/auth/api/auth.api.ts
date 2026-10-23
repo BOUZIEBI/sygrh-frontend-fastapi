@@ -43,7 +43,7 @@ export async function signIn(
   );
 
   const result = response.data;
-  console.log(result)
+  
   if (!result.success || result.code===401) {
     throw new Error(result.message || "Échec de la connexion.");
   }
