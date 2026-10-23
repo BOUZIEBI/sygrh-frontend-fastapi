@@ -35,7 +35,7 @@ export async function signIn(
 ): Promise<AuthenticationResponse<AuthenticationData>> {
 
   const response = await api.post<AuthenticationResponse<AuthenticationData>>(
-    "/auth/login/",
+    "/auth/login",
     {
       username: email,
       password,
@@ -75,7 +75,7 @@ export async function deconnexion(): Promise<LogoutResponse> {
   }
 
   const response = await api.post<LogoutResponse>(
-    "/auth/logout/",
+    "/auth/logout",
     {
       refresh_token: refreshToken,
     },
@@ -108,7 +108,7 @@ export async function getMe(): Promise<GetMeResponse> {
   headers.Authorization = `Bearer ${accessToken}`;
  
   const response = await api.get<GetMeResponse>(
-    "/auth/me/",
+    "/auth/me",
     {
       withCredentials: true,
       headers,
