@@ -36,14 +36,14 @@ export async function encryptToken(token: string, storageKey = STORAGE_KEY): Pro
   const ciphertext = await window.crypto.subtle.encrypt(
     { name: 'AES-GCM', iv, tagLength: 128 }, key, new TextEncoder().encode(token),
   );
-  sessionStorage.setItem(storageKey, JSON.stringify({
+  localStorage.setItem(storageKey, JSON.stringify({
     version: 1, iv: encode(iv), data: encode(new Uint8Array(ciphertext)),
   }));
 }
 
 /** Retourne null si aucun token n’est stocké ; rejette si le déchiffrement échoue. */
 export async function decryptToken(storageKey = STORAGE_KEY): Promise<string | null> {
-  const stored = sessionStorage.getItem(storageKey);
+  const stored = localStorage.getItem(storageKey);
   if (stored === null) return null;
   const key = await getKey();
   try {
@@ -65,7 +65,7 @@ export async function decryptToken(storageKey = STORAGE_KEY): Promise<string | n
 }
 
 export function clearToken(storageKey = STORAGE_KEY): void {
-  sessionStorage.removeItem(storageKey);
+  localStorage.removeItem(storageKey);
 }
 
 export const EncrypdecrypToten = { encryptToken, decryptToken, clearToken };

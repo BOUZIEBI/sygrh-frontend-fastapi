@@ -5,12 +5,21 @@ import { api } from "@/shared/services/apiService";
 import { clearToken, decryptToken, encryptToken } from "./EncrypdecrypToten";
 import { data } from "react-router-dom";
 
+import { forcer_deconnexion } from "@/features/auth/api/auth.api";
+
+
 
 
 export interface RefreshResponse {
+  code: number;
+  success: boolean;
   access: string;
-  refresh?: string;
+  refresh: string;
+  token_type: "bearer" | string;
+  expires_in: number;
+  data: unknown | null;
 }
+
 
 
 export async function refreshAccessToken(): Promise<RefreshResponse> {
@@ -35,9 +44,10 @@ export async function refreshAccessToken(): Promise<RefreshResponse> {
       },
     }
   );
-  console.log(data)
+  
   // Vérifier la réponse
-  if (!data?.access) {
+  if (!data?.access || data.code==401) {
+    await forcer_deconnexion()
     throw new Error("Impossible de rafraîchir le token.");
   }
 

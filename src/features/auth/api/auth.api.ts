@@ -10,6 +10,7 @@ import { encryptPayload, decryptServerResponse, type EncryptedPayload } from '@/
 import { encryptToken, decryptToken, clearToken } from '@/shared/services/EncrypdecrypToten';
 import { refreshAccessToken } from '@/shared/services/authService';
 
+const csrfToken = import.meta.env.VITE_X_CSRF_TOKEN;
 
 export async function getCsrfToken(): Promise<string> {
   const cookie = document.cookie.split(';').map((item) => item.trim())
@@ -33,6 +34,7 @@ export async function signIn(
   email: string,
   password: string
 ): Promise<AuthenticationResponse<AuthenticationData>> {
+
 
   const response = await api.post<AuthenticationResponse<AuthenticationData>>(
     "/auth/login",
@@ -75,7 +77,7 @@ export async function deconnexion(): Promise<LogoutResponse> {
   }
 
   const response = await api.post<LogoutResponse>(
-    "/auth/logout",
+    "/auth/deconnexion",
     {
       refresh_token: refreshToken,
     },
@@ -83,6 +85,30 @@ export async function deconnexion(): Promise<LogoutResponse> {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      withCredentials: true,
+    }
+  );
+
+  await clearToken("access_token");
+  await clearToken("refresh_token");
+
+  return response.data;
+}
+
+export async function forcer_deconnexion(): Promise<LogoutResponse> {
+
+  const refreshToken = await decryptToken("refresh_token");
+
+  if (!refreshToken) {
+    throw new Error("Token d'accès absent ou invalide.");
+  }
+
+  const response = await api.post<LogoutResponse>(
+    "/auth/deconnexion",
+    {
+      refresh_token: refreshToken,
+    },
+    {
       withCredentials: true,
     }
   );

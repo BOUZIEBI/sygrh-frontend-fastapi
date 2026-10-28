@@ -150,9 +150,9 @@ function AppLayout() {
               <Route
                 element={
                   <ProtectedRoute
-                    permissions={[
-                      "CONSULTERAGENT",
-                    ]}
+                    //</Routes>permissions={[
+                    //  "CONSULTERAGENT",
+                    //]}
                     requireAllPermissions={true}
                   />
                 }
@@ -166,9 +166,9 @@ function AppLayout() {
               <Route
                 element={
                   <ProtectedRoute
-                    permissions={[
-                      "CONSULTERAGENT",
-                    ]}
+                    //</Routes>permissions={[
+                    //  "CONSULTERAGENT",
+                    //]}
                     requireAllPermissions={true}
                   />
                 }
